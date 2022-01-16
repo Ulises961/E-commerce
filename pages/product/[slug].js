@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRouter } from 'next/router';
 import {
   Button,
   Card,
@@ -9,20 +8,18 @@ import {
   ListItem,
   Typography,
 } from '@mui/material';
-import data from '../../utils/data';
 import Layout from '../../components/Layout';
 import NextLink from 'next/link';
 import useStyles from '../../utils/styles';
 import Image from 'next/image';
+import Product from '../../models/Product';
+import db from '../../utils/db';
 
-export default function ProductScreen() {
+export default function ProductScreen(props) {
+  const { product } = props;
   const classes = useStyles();
-
-  const router = useRouter();
-  const { slug } = router.query;
-  const product = data.products.find((product) => product.slug === slug);
   if (!product) {
-    return <div>Product not found</div>;
+    return <>Product not Found!</>;
   }
   return (
     <Layout title={product.name} description={product.description}>
@@ -46,9 +43,11 @@ export default function ProductScreen() {
         </Grid>
         <Grid item md={3} xs={12}>
           <List>
-          <ListItem>
+            <ListItem>
               {' '}
-              <Typography component="h1" variant="h1">{product.name}</Typography>
+              <Typography component="h1" variant="h1">
+                {product.name}
+              </Typography>
             </ListItem>
             <ListItem>
               {' '}
@@ -95,7 +94,9 @@ export default function ProductScreen() {
                 </Grid>
               </ListItem>
               <ListItem>
-                <Button fullWidth variant="contained" color="primary">Add to cart</Button>
+                <Button fullWidth variant="contained" color="primary">
+                  Add to cart
+                </Button>
               </ListItem>
             </List>
           </Card>
@@ -103,4 +104,18 @@ export default function ProductScreen() {
       </Grid>
     </Layout>
   );
+}
+export async function getServerSideProps(context) {
+  const { params } = context;
+  const { slug } = params;
+
+  await db.connect();
+  const product = await Product.findOne({slug}).lean();
+  await db.disconnect();
+
+  return {
+    props: {
+      product: db.convertDocToObj(product),
+    },
+  };
 }
