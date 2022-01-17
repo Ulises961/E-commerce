@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Button,
   Card,
@@ -14,13 +14,32 @@ import useStyles from '../../utils/styles';
 import Image from 'next/image';
 import Product from '../../models/Product';
 import db from '../../utils/db';
+import { Store } from '../../utils/Store';
+import axios from 'axios';
 
 export default function ProductScreen(props) {
   const { product } = props;
   const classes = useStyles();
+
+  const { dispatch } = useContext(Store);
+
+  const addToCartHandler = async () => {
+    const { data } = await axios.get(`/api/products/${product._id}`);
+    if (data.countInStock <= 0) {
+      window.alert('Sorry, product is out of stock');
+      return;
+    }
+
+    dispatch({
+      type: 'CART_ADD_ITEM',
+      payload: { ...product, quantity: 1 },
+    });
+  };
+
   if (!product) {
     return <>Product not Found!</>;
   }
+
   return (
     <Layout title={product.name} description={product.description}>
       <div className={classes.section}>
@@ -94,7 +113,12 @@ export default function ProductScreen(props) {
                 </Grid>
               </ListItem>
               <ListItem>
-                <Button fullWidth variant="contained" color="primary">
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  onClick={addToCartHandler}
+                >
                   Add to cart
                 </Button>
               </ListItem>
@@ -110,7 +134,7 @@ export async function getServerSideProps(context) {
   const { slug } = params;
 
   await db.connect();
-  const product = await Product.findOne({slug}).lean();
+  const product = await Product.findOne({ slug }).lean();
   await db.disconnect();
 
   return {
