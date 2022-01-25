@@ -1,4 +1,11 @@
-import { createTheme, CssBaseline, Link, Switch, ThemeProvider, Badge } from '@mui/material';
+import {
+  createTheme,
+  CssBaseline,
+  Link,
+  Switch,
+  ThemeProvider,
+  Badge,
+} from '@mui/material';
 import { AppBar, Container, Toolbar, Typography } from '@mui/material';
 import Head from 'next/head';
 import React, { useContext, useEffect, useState } from 'react';
@@ -9,15 +16,14 @@ import { Store } from '../utils/Store';
 import Cookies from 'js-cookie';
 
 function Layout({ children, title, description }) {
-  const classes = useStlyes();  
+  const classes = useStlyes();
   const { state, dispatch } = useContext(Store);
-  const {darkMode, cart} = state;
+  const { darkMode, cart } = state;
 
-
-  const [mode, setMode]= useState(false);
-  useEffect(()=>{
-    setMode(darkMode)
-  },[darkMode]);
+  const [mode, setMode] = useState(false);
+  useEffect(() => {
+    setMode(darkMode);
+  }, [darkMode]);
 
   const theme = createTheme({
     typography: {
@@ -45,15 +51,20 @@ function Layout({ children, title, description }) {
       },
     },
   });
-  const darkModeChangeHandler = ()=>{
-    dispatch({type: darkMode ? 'DARK_MODE_OFF': 'DARK_MODE_ON'});
+  const darkModeChangeHandler = () => {
+    dispatch({ type: darkMode ? 'DARK_MODE_OFF' : 'DARK_MODE_ON' });
     const newDarkMode = !darkMode;
-    Cookies.set('darkMode',newDarkMode ? 'ON': 'OFF',{secure:true});
-  }
+    Cookies.set('darkMode', newDarkMode ? 'ON' : 'OFF', {
+      secure: true,
+      sameSite: 'lax',
+    });
+  };
   return (
     <div>
       <Head>
-        <title>{title ? `Next Amazona - ${title}` : 'Next Amazona'}</title>
+        <title>
+          {title ? `Next E-Commerce - ${title}` : 'Next E-Commerce'}
+        </title>
         {description && <meta name="description" content={description} />}
       </Head>
       <ThemeProvider theme={theme}>
@@ -62,14 +73,25 @@ function Layout({ children, title, description }) {
             <Toolbar>
               <NextLink href="/" passHref>
                 <Link>
-                  <Typography className={classes.brand}>Amazona</Typography>
+                  <Typography className={classes.brand}>E-Commerce</Typography>
                 </Link>
               </NextLink>
               <div className={classes.grow}></div>
               <div>
-              <Switch checked={darkMode} onChange={darkModeChangeHandler}/>
+                <Switch checked={darkMode} onChange={darkModeChangeHandler} />
                 <NextLink href="/cart" passHref>
-                  <Link sx={{ margin: '0.5rem', color: 'white' }}>{cart.cartItems.length > 0 ?  <Badge color="secondary" badgeContent={cart.cartItems.length}>Cart</Badge> : "Cart"}</Link>
+                  <Link sx={{ margin: '0.5rem', color: 'white' }}>
+                    {cart.cartItems.length > 0 ? (
+                      <Badge
+                        color="secondary"
+                        badgeContent={cart.cartItems.length}
+                      >
+                        Cart
+                      </Badge>
+                    ) : (
+                      'Cart'
+                    )}
+                  </Link>
                 </NextLink>
                 <NextLink href="/login" passHref>
                   <Link sx={{ margin: '0.5rem', color: 'white' }}>Login</Link>
@@ -80,7 +102,10 @@ function Layout({ children, title, description }) {
 
           <Container className={classes.main}>{children}</Container>
           <footer className={classes.footer}>
-            <Typography> &copy; All rights reserved. Next Amazona</Typography>
+            <Typography>
+              {' '}
+              &copy; All rights reserved. Next E-Commerce
+            </Typography>
           </footer>
         </CssBaseline>
       </ThemeProvider>
