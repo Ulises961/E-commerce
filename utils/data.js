@@ -1,4 +1,17 @@
+import bcrypt from 'bcryptjs';
 const data = {
+  users: [{
+    name:'John',
+    email:'admin@example.com',
+    password: bcrypt.hashSync('123456'),
+    isAdmin: true
+  },
+  {
+    name:'Jane',
+    email:'user@example.com',
+    password: bcrypt.hashSync('123456'),
+    isAdmin: false
+  }],
   products: [
     {
       name: 'Free Shirt',
@@ -10,7 +23,7 @@ const data = {
       numReviewes: 10,
       countInStock: 20,
       description: ' A popular shirt',
-      slug:'free-shirt',
+      slug: 'free-shirt',
     },
     {
       name: 'Fit Shirt',
@@ -22,7 +35,7 @@ const data = {
       numReviewes: 10,
       countInStock: 20,
       description: ' A popular shirt',
-      slug:'fit-shirt',
+      slug: 'fit-shirt',
     },
     {
       name: 'Slim Shirt',
@@ -34,7 +47,7 @@ const data = {
       numReviewes: 10,
       countInStock: 20,
       description: ' A popular shirt',
-      slug:'slim-shirt',
+      slug: 'slim-shirt',
     },
     {
       name: 'Golf Pants',
@@ -46,7 +59,7 @@ const data = {
       numReviewes: 10,
       countInStock: 20,
       description: 'Smart looking pants',
-      slug:'golf-pants',
+      slug: 'golf-pants',
     },
     {
       name: 'Fit pants',
@@ -58,7 +71,7 @@ const data = {
       numReviewes: 10,
       countInStock: 20,
       description: ' A popular pants',
-      slug:'fit-pants',
+      slug: 'fit-pants',
     },
     {
       name: 'Classic pants',
@@ -70,7 +83,7 @@ const data = {
       numReviewes: 10,
       countInStock: 20,
       description: ' A popular pants',
-      slug:'classic-pants',
+      slug: 'classic-pants',
     },
   ],
 };

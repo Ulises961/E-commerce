@@ -25,6 +25,10 @@ const useStyles = makeStyles({
   },
   button :{
     background: '#f0c000'
+  },
+  form : {
+    maxWidth: 800,
+    margin :' 0 auto'
   }
 });
 export default useStyles;
